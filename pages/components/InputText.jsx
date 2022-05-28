@@ -5,8 +5,10 @@ export default function InputText({ isOpen, dialogTitle }) {
     <dialog className={styles.dialog} open={isOpen}>
       <h2>{dialogTitle}</h2>
       <span>* Required</span>
-      <input type="text" placeholder="Title Text Input" required />
-      <button type="submit">OK</button>
+      <form onSubmit="">
+        <input type="text" placeholder="Title Text Input" required />
+        <button type="submit">OK</button>
+      </form>
     </dialog>
   );
 }
