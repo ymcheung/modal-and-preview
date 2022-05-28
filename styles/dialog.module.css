@@ -1,0 +1,10 @@
+.dialog {
+  position: absolute;
+  top: 64px;
+  right: 0;
+  left: 0;
+}
+
+.dialog::backdrop {
+  background-color: hsl(0 0 0 / 0.5);
+}
