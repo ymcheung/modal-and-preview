@@ -2,53 +2,82 @@ import Head from 'next/head';
 import { useState, useReducer } from 'react';
 import styles from '../styles/Home.module.css';
 
-import UploadImage from './components/UploadImage';
-import InputText from './components/InputText';
-import SetBackground from './components/SetBackground';
+import Dialog from './components/Dialog';
 
 export default function Home() {
-  const [dialog, setDialog] = useState({
-    image: false,
-    text: false,
-    background: false,
+  const formReducer = (state, action) => {
+    switch (action.type) {
+      case 'OPEN_DIALOG':
+        return {
+          ...state,
+          isOpen: true,
+          title: action.payload.title
+        };
+
+      case 'CLOSE_DIALOG':
+        return {
+          ...state,
+          isOpen: false,
+          title: ''
+        };
+
+      default:
+        return state;
+    }
+  };
+
+  const [state, dispatch] = useReducer(formReducer, {
+    isOpen: false,
     title: ''
   });
 
-  const textInputReducer = (state, action) => {
-    return {};
+  const handleOpenDialog = (dialogTitle) => {
+    dispatch({
+      type: 'OPEN_DIALOG',
+      payload: {
+        title: dialogTitle
+      }
+    });
   };
 
-  const [quizName, setQuizName] = useReducer(textInputReducer, {});
+  const Sections = () => {
+    const sections = [
+      {
+        button: 'Upload Logo',
+        dialogTitle: 'Logo'
+      },
+      {
+        button: 'Upload Cover Logo',
+        dialogTitle: 'Cover Photo'
+      },
+      {
+        button: 'Input Quiz Name',
+        dialogTitle: 'Text Input'
+      },
+      {
+        button: 'Background',
+        dialogTitle: 'Background Color/Image'
+      }
+    ];
 
-  const sections = [
-    {
-      button: 'Upload Logo',
-      dialogTitle: 'Logo',
-      type: 'image'
-    },
-    {
-      button: 'Upload Cover Logo',
-      dialogTitle: 'Cover Photo',
-      type: 'image'
-    },
-    {
-      button: 'Input Quiz Name',
-      dialogTitle: 'Text Input',
-      type: 'text'
-    },
-    {
-      button: 'Background',
-      dialogTitle: 'Background Color/Image',
-      type: 'background'
-    }
-  ];
-
-  const handleDialog = (dialogType, dialogTitle) => {
-    setDialog((prevState) => ({
-      ...prevState,
-      [dialogType]: !dialog.dialogName,
-      dialogTitle: dialogTitle
-    }));
+    return (
+      <>
+        {sections.map(({ button, dialogTitle, type }, index) => {
+          return (
+            <section className={styles.section} key={index}>
+              <h2>preview text/image</h2>
+              {/* if (!pre) return button */}
+              <button
+                type="button"
+                onClick={() => handleOpenDialog(dialogTitle)}
+              >
+                {button}
+              </button>
+            </section>
+          );
+        })}
+      </>
+    );
   };
 
   return (
@@ -60,26 +89,12 @@ export default function Home() {
       </Head>
       <header>Cover Photo</header>
       <main className={styles.container}>
-        {sections.map(({ button, dialogTitle, type }, index) => {
-          return (
-            <section className={styles.section} key={index}>
-              <h2>preview text/image</h2>
-              {/* if (!pre) return button */}
-              <button
-                type="button"
-                onClick={() => handleDialog(type, dialogTitle)}
-              >
-                {button}
-              </button>
-            </section>
-          );
-        })}
+        <Sections />
       </main>
-      <UploadImage isOpen={dialog.image} dialogTitle={dialog.dialogTitle} />
-      <InputText isOpen={dialog.text} dialogTitle={dialog.dialogTitle} />
-      <SetBackground
-        isOpen={dialog.background}
-        dialogTitle={dialog.dialogTitle}
+      <Dialog
+        isOpen={state.isOpen}
+        dialogTitle={state.title}
+        close={dispatch}
       />
     </>
   );
