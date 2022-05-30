@@ -2,7 +2,7 @@ import Head from 'next/head';
 import { useState, useReducer } from 'react';
 import styles from '../styles/Home.module.css';
 
-import Dialog from './components/Dialog';
+import Dialog from '../components/Dialog';
 
 export default function Home() {
   const dialogReducer = (state, action) => {

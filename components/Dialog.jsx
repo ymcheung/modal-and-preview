@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import styles from '../../styles/dialog.module.css';
+import styles from '../styles/dialog.module.css';
 
 export default function Dialog({ isOpen, dispatchDialog, dialogTitle, dialogDescription, inputs, setPreview }) {
   const [form, setForm] = useState({});
@@ -45,9 +45,14 @@ export default function Dialog({ isOpen, dispatchDialog, dialogTitle, dialogDesc
       {isOpen &&
         <form onSubmit={onSubmit}>
           {inputs.map(({ type, accept }) =>
-            Object.entries(form).map(([key, value], index) =>
-              <input type={type} name={key} value={value} key={index} accept={accept} onChange={handleOnChange} required />
-            )
+            Object.entries(form).map(([key, value], index) => {
+              if (type  === 'file') {
+                return <input type={type} name={key} key={index} accept={accept} onChange={handleOnChange} required />
+              }
+              if (type  !== 'file') {
+                return <input type={type} name={key} value={value} key={index} onChange={handleOnChange} required />
+              }
+            })
           )}
           <button type="submit">OK</button>
         </form>
