@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import styles from '../../styles/dialog.module.css';
 
-export default function Dialog({ isOpen, dispatchDialog, dialogTitle, inputs, setPreview }) {
+export default function Dialog({ isOpen, dispatchDialog, dialogTitle, dialogDescription, inputs, setPreview }) {
   const [form, setForm] = useState({});
 
   useEffect(() => {
@@ -41,6 +41,7 @@ export default function Dialog({ isOpen, dispatchDialog, dialogTitle, inputs, se
     <dialog className={styles.dialog} open={isOpen}>
       <h2>{dialogTitle}</h2>
       <span>* Required</span>
+      {dialogDescription && <p>{dialogDescription}</p>}
       {isOpen &&
         <form onSubmit={onSubmit}>
           {inputs.map(({ type, accept }) =>

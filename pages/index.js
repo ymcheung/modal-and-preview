@@ -12,6 +12,7 @@ export default function Home() {
           ...state,
           isOpen: true,
           title: action.payload.title,
+          description: action.payload.description,
           inputs: action.payload.inputs
         };
 
@@ -31,14 +32,16 @@ export default function Home() {
   const [dialogState, dispatchDialog] = useReducer(dialogReducer, {
     isOpen: false,
     title: '',
+    description: '',
     inputs: []
   });
 
-  const handleOpenDialog = (dialogTitle, inputs) => {
+  const handleOpenDialog = (dialogTitle, dialogDescription, inputs) => {
     dispatchDialog({
       type: 'OPEN_DIALOG',
       payload: {
         title: dialogTitle,
+        description: dialogDescription,
         inputs: inputs
       }
     });
@@ -94,6 +97,7 @@ export default function Home() {
       {
         button: 'Upload Logo',
         dialogTitle: 'Logo',
+        description: 'At least 360px in width with 2:1 ratio.',
         inputs: [
           {
             type: 'file',
@@ -126,6 +130,7 @@ export default function Home() {
       {
         button: 'Background',
         dialogTitle: 'Background Color/Image',
+        description: 'At least 360px in width with 2:1 ratio.',
         inputs: [
           {
             type: 'color',
@@ -137,7 +142,7 @@ export default function Home() {
 
     return (
       <>
-        {sections.map(({ button, dialogTitle, inputs }, index) => {
+        {sections.map(({ button, dialogTitle, description, inputs }, index) => {
           return (
             <section className={styles.section} key={index}>
               {inputs.map(({ name }) => {
@@ -147,7 +152,9 @@ export default function Home() {
                       name === 'quizName' && styles.dialogButtonQuizName
                     } ${!preview['quizName'] && styles.unfilled}`}
                     type="button"
-                    onClick={() => handleOpenDialog(dialogTitle, inputs)}
+                    onClick={() =>
+                      handleOpenDialog(dialogTitle, description, inputs)
+                    }
                     key={index}
                   >
                     {preview[name] ? preview[name] : button}
@@ -176,6 +183,7 @@ export default function Home() {
         isOpen={dialogState.isOpen}
         dispatchDialog={dispatchDialog}
         dialogTitle={dialogState.title}
+        dialogDescription={dialogState.description}
         inputs={dialogState.inputs}
         // dispatchPreview={dispatchPreview}
         setPreview={setPreview}
