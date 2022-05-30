@@ -5,13 +5,14 @@ import styles from '../styles/Home.module.css';
 import Dialog from './components/Dialog';
 
 export default function Home() {
-  const formReducer = (state, action) => {
+  const dialogReducer = (state, action) => {
     switch (action.type) {
       case 'OPEN_DIALOG':
         return {
           ...state,
           isOpen: true,
-          title: action.payload.title
+          title: action.payload.title,
+          inputs: action.payload.inputs
         };
 
       case 'CLOSE_DIALOG':
@@ -26,16 +27,18 @@ export default function Home() {
     }
   };
 
-  const [state, dispatch] = useReducer(formReducer, {
+  const [dialogState, dispatchDialog] = useReducer(dialogReducer, {
     isOpen: false,
-    title: ''
+    title: '',
+    inputs: []
   });
 
-  const handleOpenDialog = (dialogTitle) => {
-    dispatch({
+  const handleOpenDialog = (dialogTitle, inputs) => {
+    dispatchDialog({
       type: 'OPEN_DIALOG',
       payload: {
-        title: dialogTitle
+        title: dialogTitle,
+        inputs: inputs
       }
     });
   };
@@ -44,32 +47,58 @@ export default function Home() {
     const sections = [
       {
         button: 'Upload Logo',
-        dialogTitle: 'Logo'
+        dialogTitle: 'Logo',
+        inputs: [
+          {
+            type: 'file',
+            name: 'logo',
+            accept: 'image/*'
+          }
+        ]
       },
       {
-        button: 'Upload Cover Logo',
-        dialogTitle: 'Cover Photo'
+        button: 'Upload Cover Photo',
+        dialogTitle: 'Cover Photo',
+        inputs: [
+          {
+            type: 'file',
+            name: 'cover',
+            accept: 'image/*'
+          }
+        ]
       },
       {
         button: 'Input Quiz Name',
-        dialogTitle: 'Text Input'
+        dialogTitle: 'Text Input',
+        inputs: [
+          {
+            type: 'text',
+            name: 'quizName'
+          }
+        ]
       },
       {
         button: 'Background',
-        dialogTitle: 'Background Color/Image'
+        dialogTitle: 'Background Color/Image',
+        inputs: [
+          {
+            type: 'color',
+            name: 'fill'
+          }
+        ]
       }
     ];
 
     return (
       <>
-        {sections.map(({ button, dialogTitle, type }, index) => {
+        {sections.map(({ button, dialogTitle, inputs }, index) => {
           return (
             <section className={styles.section} key={index}>
               <h2>preview text/image</h2>
               {/* if (!pre) return button */}
               <button
                 type="button"
-                onClick={() => handleOpenDialog(dialogTitle)}
+                onClick={() => handleOpenDialog(dialogTitle, inputs)}
               >
                 {button}
               </button>
@@ -92,9 +121,10 @@ export default function Home() {
         <Sections />
       </main>
       <Dialog
-        isOpen={state.isOpen}
-        dialogTitle={state.title}
-        close={dispatch}
+        isOpen={dialogState.isOpen}
+        dispatch={dispatchDialog}
+        dialogTitle={dialogState.title}
+        inputs={dialogState.inputs}
       />
     </>
   );
