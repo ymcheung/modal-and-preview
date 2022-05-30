@@ -1,5 +1,5 @@
 import Head from 'next/head';
-import { useState, useReducer } from 'react';
+import { useReducer } from 'react';
 import styles from '../styles/Home.module.css';
 
 import Dialog from './components/Dialog';
@@ -48,10 +48,28 @@ export default function Home() {
 
   const previewReducer = (state, action) => {
     switch (action.type) {
-      case 'QUIZ_NAME':
+      case 'logo':
+        return {
+          ...state,
+          logo: action.payload.logo
+        };
+
+      case 'cover':
+        return {
+          ...state,
+          cover: action.payload.cover
+        };
+
+      case 'quizName':
         return {
           ...state,
           quizName: action.payload.quizName
+        };
+
+      case 'fill':
+        return {
+          ...state,
+          fill: action.payload.fill
         };
 
       default:
@@ -60,7 +78,10 @@ export default function Home() {
   };
 
   const [previewState, dispatchPreview] = useReducer(previewReducer, {
-    quizName: ''
+    logo: '',
+    cover: '',
+    quizName: '',
+    fill: ''
   });
 
   const Sections = () => {

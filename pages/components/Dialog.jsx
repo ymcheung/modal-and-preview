@@ -25,10 +25,12 @@ export default function Dialog({ isOpen, dispatchDialog, dialogTitle, inputs, di
   const onSubmit = (event) => {
     event.preventDefault();
 
-    dispatchPreview({
-      type: 'QUIZ_NAME',
-      payload: form
-    });
+    inputs.map(({ name }) => (
+      dispatchPreview({
+        type: name,
+        payload: form
+      })
+    ))
 
     dispatchDialog({
       type: 'CLOSE_DIALOG'
