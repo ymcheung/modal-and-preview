@@ -4,8 +4,34 @@
 }
 
 .section {
+  margin: 0 0 16px;
   padding: 16px 0;
   border: 1px dashed #161616;
   border-radius: 28px;
   text-align: center;
+}
+
+.section:last-child {
+  position: absolute;
+  right: 12px;
+  bottom: 12px;
+  margin: 0;
+  padding: 16px;
+}
+
+.dialogButton {
+  padding: 10px 16px;
+  color: #161616;
+  font-size: 16px;
+  background-color: transparent;
+  border: 1px solid #92918F;
+  border-radius: 100px;
+}
+
+.dialogButtonQuizName {
+  border-color: transparent;
+}
+
+.dialogButtonQuizName.unfilled {
+  opacity: 0.5
 }

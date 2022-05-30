@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import styles from '../../styles/dialog.module.css';
 
-export default function Dialog({ isOpen, dispatchDialog, dialogTitle, inputs, dispatchPreview }) {
+export default function Dialog({ isOpen, dispatchDialog, dialogTitle, inputs, setPreview }) {
   const [form, setForm] = useState({});
 
   useEffect(() => {
@@ -26,11 +26,11 @@ export default function Dialog({ isOpen, dispatchDialog, dialogTitle, inputs, di
     event.preventDefault();
 
     inputs.map(({ name }) => (
-      dispatchPreview({
-        type: name,
-        payload: form
-      })
-    ))
+      setPreview((prevState) => ({
+        ...prevState,
+        ...form
+      }))
+    ));
 
     dispatchDialog({
       type: 'CLOSE_DIALOG'

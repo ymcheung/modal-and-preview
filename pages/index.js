@@ -1,5 +1,5 @@
 import Head from 'next/head';
-import { useReducer } from 'react';
+import { useState, useReducer } from 'react';
 import styles from '../styles/Home.module.css';
 
 import Dialog from './components/Dialog';
@@ -12,8 +12,7 @@ export default function Home() {
           ...state,
           isOpen: true,
           title: action.payload.title,
-          inputs: action.payload.inputs,
-          onClose: action.payload.onClose
+          inputs: action.payload.inputs
         };
 
       case 'CLOSE_DIALOG':
@@ -40,49 +39,55 @@ export default function Home() {
       type: 'OPEN_DIALOG',
       payload: {
         title: dialogTitle,
-        inputs: inputs,
-        onClose: false
+        inputs: inputs
       }
     });
   };
 
-  const previewReducer = (state, action) => {
-    switch (action.type) {
-      case 'logo':
-        return {
-          ...state,
-          logo: action.payload.logo
-        };
-
-      case 'cover':
-        return {
-          ...state,
-          cover: action.payload.cover
-        };
-
-      case 'quizName':
-        return {
-          ...state,
-          quizName: action.payload.quizName
-        };
-
-      case 'fill':
-        return {
-          ...state,
-          fill: action.payload.fill
-        };
-
-      default:
-        return state;
-    }
-  };
-
-  const [previewState, dispatchPreview] = useReducer(previewReducer, {
+  const [preview, setPreview] = useState({
     logo: '',
     cover: '',
     quizName: '',
     fill: ''
   });
+
+  // const previewReducer = (state, action) => {
+  //   switch (action.type) {
+  //     case 'logo':
+  //       return {
+  //         ...state,
+  //         logo: action.payload.logo
+  //       };
+
+  //     case 'cover':
+  //       return {
+  //         ...state,
+  //         cover: action.payload.cover
+  //       };
+
+  //     case 'quizName':
+  //       return {
+  //         ...state,
+  //         quizName: action.payload.quizName
+  //       };
+
+  //     case 'fill':
+  //       return {
+  //         ...state,
+  //         fill: action.payload.fill
+  //       };
+
+  //     default:
+  //       return state;
+  //   }
+  // };
+
+  // const [previewState, dispatchPreview] = useReducer(previewReducer, {
+  //   logo: '',
+  //   cover: '',
+  //   quizName: '',
+  //   fill: ''
+  // });
 
   const Sections = () => {
     const sections = [
@@ -135,13 +140,20 @@ export default function Home() {
         {sections.map(({ button, dialogTitle, inputs }, index) => {
           return (
             <section className={styles.section} key={index}>
-              {inputs.map(({ name }) => previewState[name])}
-              <button
-                type="button"
-                onClick={() => handleOpenDialog(dialogTitle, inputs)}
-              >
-                {button}
-              </button>
+              {inputs.map(({ name }) => {
+                return (
+                  <button
+                    className={`${styles.dialogButton} ${
+                      name === 'quizName' && styles.dialogButtonQuizName
+                    } ${!preview['quizName'] && styles.unfilled}`}
+                    type="button"
+                    onClick={() => handleOpenDialog(dialogTitle, inputs)}
+                    key={index}
+                  >
+                    {preview[name] ? preview[name] : button}
+                  </button>
+                );
+              })}
             </section>
           );
         })}
@@ -165,7 +177,8 @@ export default function Home() {
         dispatchDialog={dispatchDialog}
         dialogTitle={dialogState.title}
         inputs={dialogState.inputs}
-        dispatchPreview={dispatchPreview}
+        // dispatchPreview={dispatchPreview}
+        setPreview={setPreview}
       />
     </>
   );
