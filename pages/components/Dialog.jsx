@@ -1,39 +1,11 @@
 import { useState, useEffect } from 'react';
 import styles from '../../styles/dialog.module.css';
 
-export default function Dialog({ isOpen, dispatch, dialogTitle, inputs }) {
-  // console.log(inputs.forEach((input) => inputs.name))
-  // const formReducer = (state, action) => {
-  //   switch (action.type) {
-  //     case 'TEXT':
-  //       return {
-  //         ...state,
-  //         type: 'text',
-  //         name: action.payload.name
-  //       };
-  //     case 'IMAGE':
-  //       return {
-  //         ...state,
-  //         type: 'file',
-  //         name: action.payload.name,
-  //         accept: 'image/*'
-  //       };
-  //     default:
-  //       return state;
-  //   }
-  // };
-
-  // const [state, dispatch] = useReducer(formReducer, {
-  //   type: '',
-  //   name: ''
-  // });
-
+export default function Dialog({ isOpen, dispatchDialog, dialogTitle, inputs, dispatchPreview }) {
   const [form, setForm] = useState({});
 
   useEffect(() => {
     if (inputs.length === 0) return;
-
-    console.log(inputs)
 
     const formObject = {};
     inputs.forEach(({ name }) => {
@@ -43,14 +15,23 @@ export default function Dialog({ isOpen, dispatch, dialogTitle, inputs }) {
     setForm(formObject);
   }, [inputs]);
 
+  const handleOnChange = (event) => {
+    setForm((prevState) => ({
+      ...prevState,
+      [event.target.name]: event.target.value
+    }));
+  };
+
   const onSubmit = (event) => {
     event.preventDefault();
-    dispatch({
-      type: 'CLOSE_DIALOG',
-      payload: {
-        title: '',
-        inputs: []
-      }
+
+    dispatchPreview({
+      type: 'QUIZ_NAME',
+      payload: form
+    });
+
+    dispatchDialog({
+      type: 'CLOSE_DIALOG'
     });
   };
 
@@ -62,7 +43,7 @@ export default function Dialog({ isOpen, dispatch, dialogTitle, inputs }) {
         <form onSubmit={onSubmit}>
           {inputs.map(({ type, accept }) =>
             Object.entries(form).map(([key, value], index) =>
-              <input type={type} name={key} value={value} key={index} accept={accept} required />
+              <input type={type} name={key} value={value} key={index} accept={accept} onChange={handleOnChange} required />
             )
           )}
           <button type="submit">OK</button>

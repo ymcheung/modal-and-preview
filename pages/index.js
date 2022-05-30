@@ -12,14 +12,16 @@ export default function Home() {
           ...state,
           isOpen: true,
           title: action.payload.title,
-          inputs: action.payload.inputs
+          inputs: action.payload.inputs,
+          onClose: action.payload.onClose
         };
 
       case 'CLOSE_DIALOG':
         return {
           ...state,
           isOpen: false,
-          title: ''
+          title: '',
+          inputs: []
         };
 
       default:
@@ -38,10 +40,28 @@ export default function Home() {
       type: 'OPEN_DIALOG',
       payload: {
         title: dialogTitle,
-        inputs: inputs
+        inputs: inputs,
+        onClose: false
       }
     });
   };
+
+  const previewReducer = (state, action) => {
+    switch (action.type) {
+      case 'QUIZ_NAME':
+        return {
+          ...state,
+          quizName: action.payload.quizName
+        };
+
+      default:
+        return state;
+    }
+  };
+
+  const [previewState, dispatchPreview] = useReducer(previewReducer, {
+    quizName: ''
+  });
 
   const Sections = () => {
     const sections = [
@@ -94,8 +114,7 @@ export default function Home() {
         {sections.map(({ button, dialogTitle, inputs }, index) => {
           return (
             <section className={styles.section} key={index}>
-              <h2>preview text/image</h2>
-              {/* if (!pre) return button */}
+              {inputs.map(({ name }) => previewState[name])}
               <button
                 type="button"
                 onClick={() => handleOpenDialog(dialogTitle, inputs)}
@@ -122,9 +141,10 @@ export default function Home() {
       </main>
       <Dialog
         isOpen={dialogState.isOpen}
-        dispatch={dispatchDialog}
+        dispatchDialog={dispatchDialog}
         dialogTitle={dialogState.title}
         inputs={dialogState.inputs}
+        dispatchPreview={dispatchPreview}
       />
     </>
   );
