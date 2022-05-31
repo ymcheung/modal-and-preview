@@ -3,8 +3,10 @@
   top: 64px;
   right: 0;
   left: 0;
+  border: 0;
+  border-radius: 28px;
 }
 
-.dialog::backdrop {
-  background-color: hsl(0deg 0% 0% / 0.5);
+.dialog::after {
+  background-color: hsl(0deg 0% 0% / 0.75);
 }

@@ -1,8 +1,16 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import styles from '../styles/dialog.module.css';
 
 export default function Dialog({ isOpen, dispatchDialog, dialogTitle, dialogDescription, inputs, setPreview }) {
+  const dialogRef = useRef(null);
   const [form, setForm] = useState({});
+
+  useEffect(() => {
+    const dialog = dialogRef.current;
+    dialog.removeAttribute('open');
+    isOpen ? dialog.showModal() : dialog.close();
+    return () => dialog.close();
+  }, [isOpen]);
 
   useEffect(() => {
     if (inputs.length === 0) return;
@@ -45,7 +53,7 @@ export default function Dialog({ isOpen, dispatchDialog, dialogTitle, dialogDesc
   };
 
   return(
-    <dialog className={styles.dialog} open={isOpen}>
+    <dialog className={styles.dialog} ref={dialogRef}>
       <h2>{dialogTitle}</h2>
       <span>* Required</span>
       {dialogDescription && <p>{dialogDescription}</p>}
