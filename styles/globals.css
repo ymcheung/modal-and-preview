@@ -1,6 +1,7 @@
 :root {
   --background: #EAE8E6;
   --custom-background: #F9F8F6;
+  --custom-background-image: url(/transparent.svg);
 }
 
 html,

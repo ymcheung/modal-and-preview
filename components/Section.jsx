@@ -5,6 +5,7 @@ export default function Section({ dispatchDialog, preview }) {
   const sections = [
     {
       label: '上傳測驗 Logo',
+      shortname: 'logo',
       style: styles.sectionLogo,
       dialogTitle: 'Logo',
       description: '建議為寬高 2:1 圖片，寬度至少 360px',
@@ -18,6 +19,7 @@ export default function Section({ dispatchDialog, preview }) {
     },
     {
       label: '上傳測驗視覺',
+      shortname: 'cover',
       style: styles.sectionCover,
       dialogTitle: 'Cover Photo',
       inputs: [
@@ -30,6 +32,7 @@ export default function Section({ dispatchDialog, preview }) {
     },
     {
       label: '輸入測驗名稱',
+      shortname: 'quizName',
       style: styles.sectionQuizName,
       dialogTitle: 'Text Input',
       inputs: [
@@ -41,10 +44,16 @@ export default function Section({ dispatchDialog, preview }) {
     },
     {
       label: '背景設定',
+      shortname: 'background',
       style: styles.sectionBackground,
       dialogTitle: '背景圖片設定',
       description: '建議為寬高 2:1 圖片，寬度至少 360px',
       inputs: [
+        {
+          type: 'file',
+          name: 'backgroundFill',
+          accept: 'image/*'
+        },
         {
           type: 'color',
           name: 'fill'
@@ -64,19 +73,39 @@ export default function Section({ dispatchDialog, preview }) {
     });
   };
 
-  const handlePreview = (preview, type, label) => {
-    if (!preview || type === 'color') return label;
-    if (type === 'file')
-      return <img className={styles.previewImage} src={preview} alt="預覽圖片" />;
-    if (type !== 'file') return preview;
+  const handlePreview = (shortname, preview, label) => {
+    switch (shortname) {
+      case 'logo':
+      case 'cover':
+        if (!preview) {
+          return label;
+        }
+        return <img className={styles.previewImage} src={preview} alt="預覽圖片" />;
+      case 'quizName':
+        if (!preview) {
+          return label;
+        }
+        return preview;
+      default:
+        return label;
+      }
   };
 
-  const handlePreviewStyles = (preview, type) => {
-    if (!preview && type === 'text') return styles.dialogButtonQuizName;
-    if (type === 'text') return styles.dialogButtonQuizNameFilled;
-    if (!preview && type === 'file') return styles.dialogButtonImage;
-
-    return '';
+  const handlePreviewStyles = (shortname, preview) => {
+    switch (shortname) {
+      case 'logo':
+      case 'cover':
+        if (!preview) {
+          return styles.dialogButtonImage;
+        }
+      case 'quizName':
+        if (!preview) {
+          return styles.dialogButtonQuizName;
+        }
+        return styles.dialogButtonQuizNameFilled
+      default:
+        return '';
+    };
   };
 
   useEffect(() => {
@@ -89,26 +118,21 @@ export default function Section({ dispatchDialog, preview }) {
   return (
     <>
       {sections.map(
-        ({ label, style, dialogTitle, description, inputs }, index) => {
+        ({ label, shortname, style, dialogTitle, description, inputs }, index) => {
           return (
             <section className={`${styles.section} ${style}`} key={index}>
-              {inputs.map(({ name, type }) => {
-                return (
-                  <button
-                    className={`${styles.dialogButton} ${handlePreviewStyles(
-                      preview[name],
-                      type
-                    )}`}
-                    type="button"
-                    onClick={() =>
-                      handleOpenDialog(dialogTitle, description, inputs)
-                    }
-                    key={index}
-                  >
-                    {handlePreview(preview[name], type, label)}
-                  </button>
-                );
-              })}
+              <button
+                className={`${styles.dialogButton} ${handlePreviewStyles(
+                  shortname, preview[shortname]
+                )}`}
+                type="button"
+                onClick={() =>
+                  handleOpenDialog(dialogTitle, description, inputs)
+                }
+                key={index}
+              >
+                {handlePreview(shortname, preview[shortname], label)}
+              </button>
             </section>
           );
         }

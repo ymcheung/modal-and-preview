@@ -1,7 +1,11 @@
 .container {
   margin: 0 12px 92px;
   padding: 16px;
+  background-image: var(--custom-background-image);
   background-color: var(--custom-background);
+  background-size: cover;
+  background-position: top center;
+  background-repeat: no-repeat;
   border: 1px dashed #161616;
   border-radius: 28px;
 }
