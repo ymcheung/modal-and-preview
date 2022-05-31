@@ -1,4 +1,5 @@
 .dialog {
+  padding: 48px 16px 16px;
   position: absolute;
   top: 64px;
   right: 0;
@@ -9,4 +10,40 @@
 
 .dialog::after {
   background-color: hsl(0deg 0% 0% / 0.75);
+}
+
+.title {
+  margin: 0 0 8px;
+  font-size: 24px;
+}
+
+.required {
+  color: #92918F;
+  font-size: 13px;
+  font-weight: normal;
+}
+
+.labelFileUpload {
+  display: inline-block;
+  margin-bottom: 24px;
+  padding: 10px 16px;
+  color: #161616;
+  font-size: 16px;
+  line-height: 16px;
+  border: 1px solid #92918F;
+  border-radius: 100px;
+}
+
+.formFileUpload {
+  display: none;
+}
+
+.submit {
+  display: block;
+  margin: 0 auto;
+  padding: 10px 24px;
+  color: #fff;
+  background-color: #020202;
+  border: 0;
+  border-radius: 100px;
 }

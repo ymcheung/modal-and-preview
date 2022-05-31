@@ -134,7 +134,7 @@ export default function Home() {
       {
         label: '背景設定',
         style: styles.sectionBackground,
-        dialogTitle: 'Background Color/Image',
+        dialogTitle: '背景圖片設定',
         description: '建議為寬高 2:1 圖片，寬度至少 360px',
         inputs: [
           {

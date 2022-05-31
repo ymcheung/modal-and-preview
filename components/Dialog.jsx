@@ -54,22 +54,27 @@ export default function Dialog({ isOpen, dispatchDialog, dialogTitle, dialogDesc
 
   return(
     <dialog className={styles.dialog} ref={dialogRef}>
-      <h2>{dialogTitle}</h2>
-      <span>* Required</span>
+      <h2 className={styles.title}>
+        {dialogTitle} <span className={styles.required}>* 必填</span>
+      </h2>
       {dialogDescription && <p>{dialogDescription}</p>}
       {isOpen &&
         <form onSubmit={onSubmit}>
           {inputs.map(({ type, accept }) =>
             Object.entries(form).map(([key, value], index) => {
               if (type === 'file') {
-                return <input type={type} name={key} key={`file-${index}`} accept={accept} onChange={handleOnFileChange} required />
+                return (
+                  <>
+                    <label className={styles.labelFileUpload} htmlFor="fileUpload">選擇圖片</label>
+                    <input id="fileUpload" className={styles.formFileUpload} type={type} name={key} key={`file-${index}`} accept={accept} onChange={handleOnFileChange} required />
+                  </>)
               }
               if (type !== 'file') {
                 return <input type={type} name={key} value={value} key={`input-${index}`} onChange={handleOnChange} required />
               }
             })
           )}
-          <button type="submit">OK</button>
+          <button className={styles.submit} type="submit">完成</button>
         </form>
       }
     </dialog>
