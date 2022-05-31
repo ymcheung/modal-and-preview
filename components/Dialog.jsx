@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, Fragment } from 'react';
 import styles from '../styles/dialog.module.css';
 
 export default function Dialog({ isOpen, dispatchDialog, dialogTitle, dialogDescription, inputs, setPreview }) {
@@ -8,6 +8,7 @@ export default function Dialog({ isOpen, dispatchDialog, dialogTitle, dialogDesc
   useEffect(() => {
     const dialog = dialogRef.current;
     dialog.removeAttribute('open');
+
     isOpen ? dialog.showModal() : dialog.close();
     return () => dialog.close();
   }, [isOpen]);
@@ -64,10 +65,10 @@ export default function Dialog({ isOpen, dispatchDialog, dialogTitle, dialogDesc
             Object.entries(form).map(([key, value], index) => {
               if (type === 'file') {
                 return (
-                  <>
+                  <Fragment key={`file-${index}`}>
                     <label className={styles.labelFileUpload} htmlFor="fileUpload">選擇圖片</label>
-                    <input id="fileUpload" className={styles.formFileUpload} type={type} name={key} key={`file-${index}`} accept={accept} onChange={handleOnFileChange} required />
-                  </>)
+                    <input id="fileUpload" className={styles.formFileUpload} type={type} name={key} accept={accept} onChange={handleOnFileChange} required />
+                  </Fragment>)
               }
               if (type !== 'file') {
                 return <input type={type} name={key} value={value} key={`input-${index}`} onChange={handleOnChange} required />

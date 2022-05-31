@@ -3,6 +3,7 @@ import { useState, useReducer, useEffect } from 'react';
 import styles from '../styles/Home.module.css';
 
 import Header from '../components/Header';
+import Section from '../components/Section';
 import Dialog from '../components/Dialog';
 
 export default function Home() {
@@ -37,128 +38,12 @@ export default function Home() {
     inputs: []
   });
 
-  const handleOpenDialog = (dialogTitle, dialogDescription, inputs) => {
-    dispatchDialog({
-      type: 'OPEN_DIALOG',
-      payload: {
-        title: dialogTitle,
-        description: dialogDescription,
-        inputs: inputs
-      }
-    });
-  };
-
   const [preview, setPreview] = useState({
     logo: '',
     cover: '',
     quizName: '',
     fill: ''
   });
-
-  const Sections = () => {
-    const sections = [
-      {
-        label: '上傳測驗 Logo',
-        style: styles.sectionLogo,
-        dialogTitle: 'Logo',
-        description: '建議為寬高 2:1 圖片，寬度至少 360px',
-        inputs: [
-          {
-            type: 'file',
-            name: 'logo',
-            accept: 'image/*'
-          }
-        ]
-      },
-      {
-        label: '上傳測驗視覺',
-        style: styles.sectionCover,
-        dialogTitle: 'Cover Photo',
-        inputs: [
-          {
-            type: 'file',
-            name: 'cover',
-            accept: 'image/*'
-          }
-        ]
-      },
-      {
-        label: '輸入測驗名稱',
-        style: styles.sectionQuizName,
-        dialogTitle: 'Text Input',
-        inputs: [
-          {
-            type: 'text',
-            name: 'quizName'
-          }
-        ]
-      },
-      {
-        label: '背景設定',
-        style: styles.sectionBackground,
-        dialogTitle: '背景圖片設定',
-        description: '建議為寬高 2:1 圖片，寬度至少 360px',
-        inputs: [
-          {
-            type: 'color',
-            name: 'fill'
-          }
-        ]
-      }
-    ];
-
-    const handlePreview = (preview, type, label) => {
-      if (!preview || type === 'color') return label;
-      if (type === 'file')
-        return <img className={styles.previewImage} src={preview} alt />;
-      if (type !== 'file') return preview;
-    };
-
-    const handlePreviewStyles = (preview, type) => {
-      if (!preview && type === 'text') return styles.dialogButtonQuizName;
-      if (type === 'text') return styles.dialogButtonQuizNameFilled;
-      if (!preview && type === 'file') return styles.dialogButtonImage;
-
-      return '';
-    };
-
-    useEffect(() => {
-      document.documentElement.style.setProperty(
-        '--custom-background',
-        preview.fill
-      );
-    }, []);
-
-    return (
-      <>
-        {sections.map(
-          ({ label, style, dialogTitle, description, inputs }, index) => {
-            return (
-              <section className={`${styles.section} ${style}`} key={index}>
-                {inputs.map(({ name, type }) => {
-                  return (
-                    <button
-                      className={`${styles.dialogButton} ${handlePreviewStyles(
-                        preview[name],
-                        type
-                      )}`}
-                      type="button"
-                      onClick={() =>
-                        handleOpenDialog(dialogTitle, description, inputs)
-                      }
-                      key={index}
-                    >
-                      {handlePreview(preview[name], type, label)}
-                    </button>
-                  );
-                })}
-              </section>
-            );
-          }
-        )}
-      </>
-    );
-  };
 
   return (
     <>
@@ -169,7 +54,7 @@ export default function Home() {
       </Head>
       <Header />
       <main className={styles.container}>
-        <Sections />
+        <Section dispatchDialog={dispatchDialog} preview={preview} />
       </main>
       <Dialog
         isOpen={dialogState.isOpen}
@@ -177,7 +62,6 @@ export default function Home() {
         dialogTitle={dialogState.title}
         dialogDescription={dialogState.description}
         inputs={dialogState.inputs}
-        // dispatchPreview={dispatchPreview}
         setPreview={setPreview}
       />
     </>
