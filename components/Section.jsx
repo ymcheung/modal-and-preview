@@ -12,8 +12,7 @@ export default function Section({ dispatchDialog, preview }) {
       inputs: [
         {
           type: 'file',
-          name: 'logo',
-          accept: 'image/*'
+          name: 'logo'
         }
       ]
     },
@@ -25,8 +24,7 @@ export default function Section({ dispatchDialog, preview }) {
       inputs: [
         {
           type: 'file',
-          name: 'cover',
-          accept: 'image/*'
+          name: 'cover'
         }
       ]
     },
@@ -49,6 +47,10 @@ export default function Section({ dispatchDialog, preview }) {
       dialogTitle: '背景圖片設定',
       description: '建議為寬高 2:1 圖片，寬度至少 360px',
       inputs: [
+        {
+          type: 'file',
+          name: 'imageFill'
+        },
         {
           type: 'color',
           name: 'fill'

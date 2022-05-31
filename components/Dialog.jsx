@@ -53,6 +53,26 @@ export default function Dialog({ isOpen, dispatchDialog, dialogTitle, dialogDesc
     });
   };
 
+  const handleFileForm = () => {
+    const forms = inputs.filter(({ type }) => type === 'file');
+
+    return forms.map(({ type, name }, index) =>
+    (
+      <Fragment key={`file-${index}`}>
+        <label className={styles.labelFileUpload} htmlFor="fileUpload">選擇圖片</label>
+        <input id="fileUpload" className={styles.formFileUpload} type={type} name={name} accept="image/*" onChange={handleOnFileChange} required />
+      </Fragment>
+    ))
+  }
+
+  const handleStringForm = () => {
+    const forms = inputs.filter(({ type }) => type !== 'file');
+
+    return forms.map(({ type, name }, index) =>
+      <input type={type} name={name} value={form[name] ? form[name] : ''} key={`input-${index}`} onChange={handleOnChange} required />
+    )
+  }
+
   return(
     <dialog className={styles.dialog} ref={dialogRef}>
       <h2 className={styles.title}>
@@ -61,20 +81,8 @@ export default function Dialog({ isOpen, dispatchDialog, dialogTitle, dialogDesc
       {dialogDescription && <p>{dialogDescription}</p>}
       {isOpen &&
         <form onSubmit={onSubmit}>
-          {inputs.map(({ type, accept }) =>
-            Object.entries(form).map(([key, value], index) => {
-              if (type === 'file') {
-                return (
-                  <Fragment key={`file-${index}`}>
-                    <label className={styles.labelFileUpload} htmlFor="fileUpload">選擇圖片</label>
-                    <input id="fileUpload" className={styles.formFileUpload} type={type} name={key} accept={accept} onChange={handleOnFileChange} required />
-                  </Fragment>)
-              }
-              if (type !== 'file') {
-                return <input type={type} name={key} value={value} key={`input-${index}`} onChange={handleOnChange} required />
-              }
-            })
-          )}
+          {handleFileForm()}
+          {handleStringForm()}
           <button className={styles.submit} type="submit">完成</button>
         </form>
       }
