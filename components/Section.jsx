@@ -50,11 +50,6 @@ export default function Section({ dispatchDialog, preview }) {
       description: '建議為寬高 2:1 圖片，寬度至少 360px',
       inputs: [
         {
-          type: 'file',
-          name: 'backgroundFill',
-          accept: 'image/*'
-        },
-        {
           type: 'color',
           name: 'fill'
         }
