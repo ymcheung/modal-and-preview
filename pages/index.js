@@ -95,9 +95,9 @@ export default function Home() {
   const Sections = () => {
     const sections = [
       {
-        button: 'Upload Logo',
+        label: '上傳測驗 Logo',
         dialogTitle: 'Logo',
-        description: 'At least 360px in width with 2:1 ratio.',
+        description: '建議為寬高 2:1 圖片，寬度至少 360px',
         inputs: [
           {
             type: 'file',
@@ -107,7 +107,7 @@ export default function Home() {
         ]
       },
       {
-        button: 'Upload Cover Photo',
+        label: '上傳測驗視覺',
         dialogTitle: 'Cover Photo',
         inputs: [
           {
@@ -118,7 +118,7 @@ export default function Home() {
         ]
       },
       {
-        button: 'Input Quiz Name',
+        label: '輸入測驗名稱',
         dialogTitle: 'Text Input',
         inputs: [
           {
@@ -128,9 +128,9 @@ export default function Home() {
         ]
       },
       {
-        button: 'Background',
+        label: '背景圖片設定',
         dialogTitle: 'Background Color/Image',
-        description: 'At least 360px in width with 2:1 ratio.',
+        description: '建議為寬高 2:1 圖片，寬度至少 360px',
         inputs: [
           {
             type: 'color',
@@ -140,24 +140,41 @@ export default function Home() {
       }
     ];
 
+    const handlePreview = (preview, type, label) => {
+      if (!preview || type === 'color') return label;
+      if (type === 'file')
+        return <img className={styles.previewImage} src={preview} alt />;
+      if (type !== 'file') return preview;
+    };
+
+    const handlePreviewStyles = (preview, type) => {
+      if (!preview && type === 'text') return styles.dialogButtonQuizName;
+      if (type === 'text') return styles.dialogButtonQuizNameFilled;
+      if (!preview && type === 'file') return styles.dialogButtonImage;
+
+      return '';
+    };
+
     return (
       <>
-        {sections.map(({ button, dialogTitle, description, inputs }, index) => {
+        {sections.map(({ label, dialogTitle, description, inputs }, index) => {
           return (
             <section className={styles.section} key={index}>
-              {inputs.map(({ name }) => {
+              {inputs.map(({ name, type }) => {
                 return (
                   <button
-                    className={`${styles.dialogButton} ${
-                      name === 'quizName' && styles.dialogButtonQuizName
-                    } ${!preview['quizName'] && styles.unfilled}`}
+                    className={`${styles.dialogButton} ${handlePreviewStyles(
+                      preview[name],
+                      type
+                    )}`}
                     type="button"
                     onClick={() =>
                       handleOpenDialog(dialogTitle, description, inputs)
                     }
                     key={index}
                   >
-                    {preview[name] ? preview[name] : button}
+                    {handlePreview(preview[name], type, label)}
+                    {/* {preview[name] ? preview[name] : label} */}
                   </button>
                 );
               })}

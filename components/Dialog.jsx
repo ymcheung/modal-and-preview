@@ -15,6 +15,13 @@ export default function Dialog({ isOpen, dispatchDialog, dialogTitle, dialogDesc
     setForm(formObject);
   }, [inputs]);
 
+  const handleOnFileChange = (event) => {
+    setForm((prevState) => ({
+      ...prevState,
+      [event.target.name]: URL.createObjectURL(event.target.files[0])
+    }));
+  };
+
   const handleOnChange = (event) => {
     setForm((prevState) => ({
       ...prevState,
@@ -46,11 +53,11 @@ export default function Dialog({ isOpen, dispatchDialog, dialogTitle, dialogDesc
         <form onSubmit={onSubmit}>
           {inputs.map(({ type, accept }) =>
             Object.entries(form).map(([key, value], index) => {
-              if (type  === 'file') {
-                return <input type={type} name={key} key={index} accept={accept} onChange={handleOnChange} required />
+              if (type === 'file') {
+                return <input type={type} name={key} key={`file-${index}`} accept={accept} onChange={handleOnFileChange} required />
               }
-              if (type  !== 'file') {
-                return <input type={type} name={key} value={value} key={index} onChange={handleOnChange} required />
+              if (type !== 'file') {
+                return <input type={type} name={key} value={value} key={`input-${index}`} onChange={handleOnChange} required />
               }
             })
           )}
