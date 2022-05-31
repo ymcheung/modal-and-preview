@@ -1,7 +1,7 @@
 .container {
-  margin: 0 12px;
+  margin: 0 12px 92px;
   padding: 16px;
-  background-color: #F9F8F6;
+  background-color: var(--custom-background);
   border: 1px dashed #161616;
   border-radius: 28px;
 }

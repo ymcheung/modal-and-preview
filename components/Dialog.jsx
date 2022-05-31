@@ -40,7 +40,7 @@ export default function Dialog({ isOpen, dispatchDialog, dialogTitle, dialogDesc
   const onSubmit = (event) => {
     event.preventDefault();
 
-    inputs.map(({ name }) => (
+    inputs.map(() => (
       setPreview((prevState) => ({
         ...prevState,
         ...form

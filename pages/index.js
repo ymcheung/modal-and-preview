@@ -1,5 +1,5 @@
 import Head from 'next/head';
-import { useState, useReducer } from 'react';
+import { useState, useReducer, useEffect } from 'react';
 import styles from '../styles/Home.module.css';
 
 import Header from '../components/Header';
@@ -54,44 +54,6 @@ export default function Home() {
     quizName: '',
     fill: ''
   });
-
-  // const previewReducer = (state, action) => {
-  //   switch (action.type) {
-  //     case 'logo':
-  //       return {
-  //         ...state,
-  //         logo: action.payload.logo
-  //       };
-
-  //     case 'cover':
-  //       return {
-  //         ...state,
-  //         cover: action.payload.cover
-  //       };
-
-  //     case 'quizName':
-  //       return {
-  //         ...state,
-  //         quizName: action.payload.quizName
-  //       };
-
-  //     case 'fill':
-  //       return {
-  //         ...state,
-  //         fill: action.payload.fill
-  //       };
-
-  //     default:
-  //       return state;
-  //   }
-  // };
-
-  // const [previewState, dispatchPreview] = useReducer(previewReducer, {
-  //   logo: '',
-  //   cover: '',
-  //   quizName: '',
-  //   fill: ''
-  // });
 
   const Sections = () => {
     const sections = [
@@ -160,6 +122,13 @@ export default function Home() {
       return '';
     };
 
+    useEffect(() => {
+      document.documentElement.style.setProperty(
+        '--custom-background',
+        preview.fill
+      );
+    }, []);
+
     return (
       <>
         {sections.map(
@@ -180,7 +149,6 @@ export default function Home() {
                       key={index}
                     >
                       {handlePreview(preview[name], type, label)}
-                      {/* {preview[name] ? preview[name] : label} */}
                     </button>
                   );
                 })}
