@@ -1,5 +1,5 @@
 import Head from 'next/head';
-import { useState, useReducer, useEffect } from 'react';
+import { useState, useReducer } from 'react';
 import styles from '../styles/Home.module.css';
 
 import Header from '../components/Header';
@@ -42,7 +42,8 @@ export default function Home() {
     logo: '',
     cover: '',
     quizName: '',
-    fill: ''
+    fill: '',
+    imageFill: ''
   });
 
   return (

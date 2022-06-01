@@ -24,23 +24,44 @@
 }
 
 .labelFileUpload {
-  display: inline-block;
+  display: block;
+  width: 108px;
   margin-bottom: 24px;
   padding: 10px 16px;
   color: #161616;
   font-size: 16px;
   line-height: 16px;
+  text-align: center;
   border: 1px solid #92918F;
   border-radius: 100px;
+}
+
+.labelColor {
+  display: inline-block;
+  margin-left: 16px;
+  padding: 0 8px;
+  font-size: 16px;
+  line-height: 28px;
+  border: 1px solid #92918F;
+  border-radius: 8px;
 }
 
 .formFileUpload {
   display: none;
 }
 
+.formText {
+  margin: 0 -4px;
+  padding: 0 4px;
+  font-size: 18px;
+  line-height: 2;
+  font-weight: bold;
+  border: 0;
+}
+
 .submit {
   display: block;
-  margin: 0 auto;
+  margin: 24px auto 0;
   padding: 10px 24px;
   color: #fff;
   background-color: #020202;

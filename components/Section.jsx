@@ -36,7 +36,8 @@ export default function Section({ dispatchDialog, preview }) {
       inputs: [
         {
           type: 'text',
-          name: 'quizName'
+          name: 'quizName',
+          placeholder: 'Title Text Input'
         }
       ]
     },

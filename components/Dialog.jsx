@@ -68,8 +68,13 @@ export default function Dialog({ isOpen, dispatchDialog, dialogTitle, dialogDesc
   const handleStringForm = () => {
     const forms = inputs.filter(({ type }) => type !== 'file');
 
-    return forms.map(({ type, name }, index) =>
-      <input type={type} name={name} value={form[name] ? form[name] : ''} key={`input-${index}`} onChange={handleOnChange} required />
+    return forms.map(({ type, name, placeholder }, index) =>
+      <Fragment key={`input-${index}`}>
+        <input className={type === 'text' ? styles.formText : ''} type={type} name={name} value={form[name] ? form[name] : ''} required placeholder={placeholder} onChange={handleOnChange} />
+        {
+          name === 'fill' && <span className={styles.labelColor}>{form['fill']}</span>
+        }
+      </Fragment>
     )
   }
 
