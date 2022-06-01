@@ -1,8 +1,27 @@
 .header {
   margin-bottom: 20px;
-  padding: 100px 16px 28px;
+  padding: 24px 16px 28px;
   background-color: #fff;
   border-bottom: 1px solid hsl(0deg 0% 0% / 0.25);
+}
+
+.navList {
+  display: flex;
+  justify-content: space-between;
+  margin: 0 0 60px;
+  padding: 0;
+}
+
+.navList li {
+  list-style: none;
+}
+
+.navListLink {
+  display: inline-block;
+}
+
+.navListLinkMore {
+  margin-left: 16px;
 }
 
 .title {
