@@ -28,10 +28,6 @@
   padding: 10px 24px;
 }
 
-.sectionQuizName {
-  margin-bottom: 0;
-}
-
 .previewImage {
   max-width: 100%;
 }
@@ -54,6 +50,13 @@
   opacity: 0.5;
 }
 
-.dialogButtonQuizNameFilled {
+.dialogButtonAction {
+  opacity: 0.5;
+  color: #fff;
+  background-color: #020202;
+  border-radius: 100px;
+}
+
+.dialogButtonTextInputFilled {
   opacity: 1;
 }

@@ -42,6 +42,19 @@ export default function Section({ dispatchDialog, preview }) {
       ]
     },
     {
+      label: '設定按鈕',
+      shortname: 'action',
+      style: styles.sectionAction,
+      dialogTitle: 'Text Input',
+      inputs: [
+        {
+          type: 'text',
+          name: 'action',
+          placeholder: 'Title Text Input'
+        }
+      ]
+    },
+    {
       label: '背景設定',
       shortname: 'background',
       style: styles.sectionBackground,
@@ -80,6 +93,7 @@ export default function Section({ dispatchDialog, preview }) {
         }
         return <img className={styles.previewImage} src={preview} alt="預覽圖片" />;
       case 'quizName':
+      case 'action':
         if (!preview) {
           return label;
         }
@@ -100,7 +114,12 @@ export default function Section({ dispatchDialog, preview }) {
         if (!preview) {
           return styles.dialogButtonQuizName;
         }
-        return styles.dialogButtonQuizNameFilled
+        return styles.dialogButtonTextInputFilled
+      case 'action':
+        if (!preview) {
+          return styles.dialogButtonAction;
+        }
+        return `${styles.dialogButtonAction} ${styles.dialogButtonTextInputFilled}`
       default:
         return '';
     };

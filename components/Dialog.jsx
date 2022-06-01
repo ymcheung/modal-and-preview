@@ -72,7 +72,7 @@ export default function Dialog({ isOpen, dispatchDialog, dialogTitle, dialogDesc
       <Fragment key={`input-${index}`}>
         <input className={type === 'text' ? styles.formText : ''} type={type} name={name} value={form[name] ? form[name] : ''} required placeholder={placeholder} onChange={handleOnChange} />
         {
-          name === 'fill' && <span className={styles.labelColor}>{form['fill']}</span>
+          form['fill'] && <span className={styles.labelColor}>{form['fill']}</span>
         }
       </Fragment>
     )
