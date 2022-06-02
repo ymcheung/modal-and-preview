@@ -5,12 +5,8 @@
 ```bash
 git clone https://github.com/ymcheung/modal-and-preview
 
-npm install
-# 或
 yarn install
 
-npm run dev
-# 或
 yarn dev
 ```
 
