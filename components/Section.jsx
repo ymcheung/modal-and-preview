@@ -12,7 +12,8 @@ export default function Section({ dispatchDialog, preview }) {
       inputs: [
         {
           type: 'file',
-          name: 'logo'
+          name: 'logo',
+          required: true
         }
       ]
     },
@@ -24,7 +25,8 @@ export default function Section({ dispatchDialog, preview }) {
       inputs: [
         {
           type: 'file',
-          name: 'cover'
+          name: 'cover',
+          required: true
         }
       ]
     },
@@ -37,7 +39,8 @@ export default function Section({ dispatchDialog, preview }) {
         {
           type: 'text',
           name: 'quizName',
-          placeholder: 'Title Text Input'
+          placeholder: 'Title Text Input',
+          required: true
         }
       ]
     },
@@ -50,7 +53,8 @@ export default function Section({ dispatchDialog, preview }) {
         {
           type: 'text',
           name: 'action',
-          placeholder: 'Title Text Input'
+          placeholder: 'Title Text Input',
+          required: true
         }
       ]
     },
@@ -63,11 +67,14 @@ export default function Section({ dispatchDialog, preview }) {
       inputs: [
         {
           type: 'file',
-          name: 'imageFill'
+          name: 'imageFill',
+          required: false
         },
         {
           type: 'color',
-          name: 'fill'
+          name: 'fill',
+          placeholder: '#',
+          required: false
         }
       ]
     }
@@ -131,6 +138,14 @@ export default function Section({ dispatchDialog, preview }) {
       preview.fill
     );
   }, [preview.fill]);
+
+
+  useEffect(() => {
+    document.documentElement.style.setProperty(
+      '--custom-background-image',
+      `url(${preview.imageFill})`
+    );
+  }, [preview.imageFill]);
 
   return (
     <>

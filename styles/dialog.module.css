@@ -1,6 +1,6 @@
 .dialog {
   padding: 48px 16px 16px;
-  position: absolute;
+  position: fixed;
   top: 64px;
   right: 0;
   left: 0;
@@ -8,7 +8,8 @@
   border-radius: 28px;
 }
 
-.dialog::after {
+.dialog::backdrop {
+  overflow: hidden;
   background-color: hsl(0deg 0% 0% / 0.75);
 }
 

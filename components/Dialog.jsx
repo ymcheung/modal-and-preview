@@ -18,11 +18,11 @@ export default function Dialog({ isOpen, dispatchDialog, dialogTitle, dialogDesc
 
     const formObject = {};
     inputs.forEach(({ name }) => {
-      formObject[name] = ''
+      formObject[name] = '';
     });
 
     setForm(formObject);
-  }, [inputs]);
+  }, [setForm]);
 
   const handleOnFileChange = (event) => {
     setForm((prevState) => ({
@@ -56,27 +56,33 @@ export default function Dialog({ isOpen, dispatchDialog, dialogTitle, dialogDesc
   const handleFileForm = () => {
     const forms = inputs.filter(({ type }) => type === 'file');
 
-    return forms.map(({ type, name }, index) =>
+    return forms.map(({ type, name, required }, index) =>
     (
       <Fragment key={`file-${index}`}>
         <label className={styles.labelFileUpload} htmlFor="fileUpload">選擇圖片</label>
-        <input id="fileUpload" className={styles.formFileUpload} type={type} name={name} accept="image/*" onChange={handleOnFileChange} required />
+        <input id="fileUpload" className={styles.formFileUpload} type={type} name={name} accept="image/*" onChange={handleOnFileChange} required={required} />
       </Fragment>
-    ))
+    ));
   }
 
   const handleStringForm = () => {
-    const forms = inputs.filter(({ type }) => type !== 'file');
+    const forms = inputs.filter(({ type }) => type === 'text');
 
-    return forms.map(({ type, name, placeholder }, index) =>
-      <Fragment key={`input-${index}`}>
-        <input className={type === 'text' ? styles.formText : ''} type={type} name={name} value={form[name] ? form[name] : ''} required placeholder={placeholder} onChange={handleOnChange} />
-        {
-          form['fill'] && <span className={styles.labelColor}>{form['fill']}</span>
-        }
+    return forms.map(({ name, placeholder, required }, index) =>
+      <input className={styles.formText} type="text" name={name} value={form[name] ? form[name] : ''} required={required} placeholder={placeholder} onChange={handleOnChange} key={`text-${index}`} />
+    );
+  }
+
+  const handleColorForm = () => {
+    const forms = inputs.filter(({ type }) => type === 'color');
+
+    return forms.map(({ name, placeholder, required }, index) =>
+      <Fragment key={`color-${index}`}>
+        <input type="color" name={name} value={form[name] ? form[name] : ''} required={required} onChange={handleOnChange} />
+        <input className={styles.labelColor} type="text" name={name} value={form[name] ? form[name] : ''} required={required} onChange={handleOnChange} placeholder={placeholder} />
       </Fragment>
     )
-  }
+  };
 
   return(
     <dialog className={styles.dialog} ref={dialogRef}>
@@ -88,6 +94,7 @@ export default function Dialog({ isOpen, dispatchDialog, dialogTitle, dialogDesc
         <form onSubmit={onSubmit}>
           {handleFileForm()}
           {handleStringForm()}
+          {handleColorForm()}
           <button className={styles.submit} type="submit">完成</button>
         </form>
       }
