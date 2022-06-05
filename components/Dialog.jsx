@@ -26,7 +26,7 @@ export default function Dialog({ isOpen, dispatchDialog, dialogTitle, dialogDesc
       ...prevState,
       ...formObject
     }));
-  }, [setForm]);
+  }, []);
 
   const handleOnFileChange = (event) => {
     setForm((prevState) => ({
@@ -64,9 +64,7 @@ export default function Dialog({ isOpen, dispatchDialog, dialogTitle, dialogDesc
     });
   };
 
-  const handleFileForm = () => {
-    const forms = inputs.filter(({ type }) => type === 'file');
-
+  const handleFileForm = (forms) => {
     return forms.map(({ type, name, required }, index) =>
     (
       <div className={styles.fileFormSection} key={`file-${index}`}>
@@ -76,7 +74,8 @@ export default function Dialog({ isOpen, dispatchDialog, dialogTitle, dialogDesc
           <>
             <label htmlFor="fileUpload">
               <img className={styles.labelFileCrop} src={form[name]} alt="替換圖片" />
-              <span className={styles.labelFileName}>{fileRef.current ? fileRef.current.files[0].name : '選另外一張圖片'}</span>
+              <span className={styles.labelFileName}>{fileRef.current && fileRef.current.files.length > 0 ? fileRef.current.files[0].name : '選另外一張圖片'}</span>
+              {console.log(fileRef)}
             </label>
             <button className={styles.formFileRemove} type="button" onClick={() => handleRemove(name)}>
               <img src="/trash.svg" alt="刪除" />
@@ -91,21 +90,17 @@ export default function Dialog({ isOpen, dispatchDialog, dialogTitle, dialogDesc
     ));
   }
 
-  const handleStringForm = () => {
-    const forms = inputs.filter(({ type }) => type === 'text');
-
+  const handleStringForm = (forms) => {
     return forms.map(({ name, placeholder, required }, index) =>
       <input className={styles.formText} type="text" name={name} value={form[name] ? form[name] : ''} required={required} placeholder={placeholder} onChange={handleOnChange} key={`text-${index}`} />
     );
   }
 
-  const handleColorForm = () => {
-    const forms = inputs.filter(({ type }) => type === 'color');
-
+  const handleColorForm = (forms) => {
     return forms.map(({ name, placeholder, required }, index) =>
       <div key={`color-${index}`}>
         <input className={styles.formColor} type="color" name={name} value={form[name] ? form[name] : ''} required={required} onChange={handleOnChange} />
-        <input className={styles.labelColor} type="text" name={name} value={form[name] ? form[name] : ''} required={required} onChange={handleOnChange} placeholder={placeholder} />
+        <input className={styles.labelColor} type="text" name={name} value={form[name] ? form[name] : ''} required={required} onChange={handleOnChange} maxLength={7} placeholder={placeholder} />
       </div>
     )
   };
@@ -118,9 +113,15 @@ export default function Dialog({ isOpen, dispatchDialog, dialogTitle, dialogDesc
       {dialogDescription && <p>{dialogDescription}</p>}
       {isOpen &&
         <form onSubmit={onSubmit}>
-          {handleFileForm()}
-          {handleStringForm()}
-          {handleColorForm()}
+          {
+            handleFileForm(inputs.filter(({ type }) => type === 'file'))
+          }
+          {
+            handleStringForm(inputs.filter(({ type }) => type === 'text'))
+          }
+          {
+            handleColorForm(inputs.filter(({ type }) => type === 'color'))
+          }
           <button className={styles.submit} type="submit">完成</button>
         </form>
       }
