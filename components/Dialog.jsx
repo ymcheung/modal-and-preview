@@ -40,6 +40,13 @@ export default function Dialog({ isOpen, dispatchDialog, dialogTitle, dialogDesc
       ...prevState,
       [event.target.name]: event.target.value
     }));
+
+    if (event.target.name === 'fill' && /^#(?:[0-9a-f]{3}){1,2}$/i.test(event.target.value) ) {
+      document.documentElement.style.setProperty(
+        '--custom-background',
+        event.target.value
+      );
+    }
   };
 
   const handleRemove = (formName) => {
@@ -75,7 +82,6 @@ export default function Dialog({ isOpen, dispatchDialog, dialogTitle, dialogDesc
             <label htmlFor="fileUpload">
               <img className={styles.labelFileCrop} src={form[name]} alt="替換圖片" />
               <span className={styles.labelFileName}>{fileRef.current && fileRef.current.files.length > 0 ? fileRef.current.files[0].name : '選另外一張圖片'}</span>
-              {console.log(fileRef)}
             </label>
             <button className={styles.formFileRemove} type="button" onClick={() => handleRemove(name)}>
               <img src="/trash.svg" alt="刪除" />
@@ -99,32 +105,43 @@ export default function Dialog({ isOpen, dispatchDialog, dialogTitle, dialogDesc
   const handleColorForm = (forms) => {
     return forms.map(({ name, placeholder, required }, index) =>
       <div key={`color-${index}`}>
+        <a className={styles.labelColor} href="#page2" />
         <input className={styles.formColor} type="color" name={name} value={form[name] ? form[name] : ''} required={required} onChange={handleOnChange} />
-        <input className={styles.labelColor} type="text" name={name} value={form[name] ? form[name] : ''} required={required} onChange={handleOnChange} maxLength={7} placeholder={placeholder} />
+        <input className={styles.inputColor} type="text" name={name} value={form[name] ? form[name] : ''} required={required} onChange={handleOnChange} maxLength={7} placeholder={placeholder} />
       </div>
     )
   };
 
   return(
     <dialog className={styles.dialog} ref={dialogRef}>
-      <h2 className={styles.title}>
-        {dialogTitle} <span className={styles.required}>* 必填</span>
-      </h2>
-      {dialogDescription && <p>{dialogDescription}</p>}
-      {isOpen &&
-        <form onSubmit={onSubmit}>
-          {
-            handleFileForm(inputs.filter(({ type }) => type === 'file'))
-          }
-          {
-            handleStringForm(inputs.filter(({ type }) => type === 'text'))
-          }
-          {
-            handleColorForm(inputs.filter(({ type }) => type === 'color'))
-          }
-          <button className={styles.submit} type="submit">完成</button>
-        </form>
-      }
+      <div className={styles.dialogForms}>
+        <div id="page1" className={styles.dialogFormsPage}>
+          <h2 className={styles.title}>
+            {dialogTitle} <span className={styles.required}>* 必填</span>
+          </h2>
+          {dialogDescription && <p>{dialogDescription}</p>}
+          <form onSubmit={onSubmit}>
+            {
+              handleFileForm(inputs.filter(({ type }) => type === 'file'))
+            }
+            {
+              handleStringForm(inputs.filter(({ type }) => type === 'text'))
+            }
+            {
+              handleColorForm(inputs.filter(({ type }) => type === 'color'))
+            }
+            <button className={styles.submit} type="submit">完成</button>
+          </form>
+        </div>
+        {
+          inputs.some(({ type }) => type === 'color') &&
+          <div id="page2" className={styles.dialogFormsPage}>
+            <a href="#page1">
+              <img src="/arrowLeft.svg" alt="上一頁" />
+            </a>
+          </div>
+        }
+      </div>
     </dialog>
   );
 }
