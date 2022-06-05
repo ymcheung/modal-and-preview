@@ -43,7 +43,7 @@ export default function Home() {
     cover: '',
     quizName: '',
     fill: '',
-    imageFill: ''
+    imagefill: ''
   });
 
   return (

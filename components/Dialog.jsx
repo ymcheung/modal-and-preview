@@ -1,8 +1,9 @@
-import { useState, useEffect, useRef, Fragment } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import styles from '../styles/dialog.module.css';
 
 export default function Dialog({ isOpen, dispatchDialog, dialogTitle, dialogDescription, inputs, setPreview }) {
   const dialogRef = useRef(null);
+  const fileRef = useRef(null);
   const [form, setForm] = useState({});
 
   useEffect(() => {
@@ -38,6 +39,13 @@ export default function Dialog({ isOpen, dispatchDialog, dialogTitle, dialogDesc
     }));
   };
 
+  const handleRemove = (formName) => {
+    setForm((prevState) => ({
+      ...prevState,
+      [formName]: ''
+    }));
+  };
+
   const onSubmit = (event) => {
     event.preventDefault();
 
@@ -58,10 +66,25 @@ export default function Dialog({ isOpen, dispatchDialog, dialogTitle, dialogDesc
 
     return forms.map(({ type, name, required }, index) =>
     (
-      <Fragment key={`file-${index}`}>
-        <label className={styles.labelFileUpload} htmlFor="fileUpload">選擇圖片</label>
-        <input id="fileUpload" className={styles.formFileUpload} type={type} name={name} accept="image/*" onChange={handleOnFileChange} required={required} />
-      </Fragment>
+      <div className={styles.fileFormSection} key={`file-${index}`}>
+      {
+        form[name] ?
+        <>
+          <label htmlFor="fileUpload">
+            <img className={styles.labelFileCrop} src={form[name]} alt="替換圖片" />
+            <span className={styles.labelFileName}>{fileRef.current.files[0].name}</span>
+          </label>
+          <button className={styles.formFileRemove} type="button" onClick={() => handleRemove(name)}>
+            <img src="/trash.svg" alt="刪除" />
+          </button>
+        </> :
+        <label className={styles.labelFileUpload} htmlFor="fileUpload">
+          <img className={styles.labelFileAddIcon} src="/plus.svg" alt="選擇" />
+          選擇圖片
+        </label>
+      }
+      <input id="fileUpload" className={styles.formFileUpload} type={type} name={name} ref={fileRef} onChange={handleOnFileChange} required={required} accept="image/*" />
+      </div>
     ));
   }
 
@@ -77,10 +100,10 @@ export default function Dialog({ isOpen, dispatchDialog, dialogTitle, dialogDesc
     const forms = inputs.filter(({ type }) => type === 'color');
 
     return forms.map(({ name, placeholder, required }, index) =>
-      <Fragment key={`color-${index}`}>
-        <input type="color" name={name} value={form[name] ? form[name] : ''} required={required} onChange={handleOnChange} />
+      <div key={`color-${index}`}>
+        <input className={styles.formColor} type="color" name={name} value={form[name] ? form[name] : ''} required={required} onChange={handleOnChange} />
         <input className={styles.labelColor} type="text" name={name} value={form[name] ? form[name] : ''} required={required} onChange={handleOnChange} placeholder={placeholder} />
-      </Fragment>
+      </div>
     )
   };
 

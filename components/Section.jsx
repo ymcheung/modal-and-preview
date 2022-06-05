@@ -67,13 +67,13 @@ export default function Section({ dispatchDialog, preview }) {
       inputs: [
         {
           type: 'file',
-          name: 'imageFill',
+          name: 'imagefill',
           required: false
         },
         {
           type: 'color',
           name: 'fill',
-          placeholder: '#',
+          placeholder: '#ffffff',
           required: false
         }
       ]
@@ -134,18 +134,17 @@ export default function Section({ dispatchDialog, preview }) {
 
   useEffect(() => {
     document.documentElement.style.setProperty(
+      '--custom-background-image',
+      `url('${preview.imagefill}')`
+    );
+  }, [preview.imagefill]);
+
+  useEffect(() => {
+    document.documentElement.style.setProperty(
       '--custom-background',
       preview.fill
     );
   }, [preview.fill]);
-
-
-  useEffect(() => {
-    document.documentElement.style.setProperty(
-      '--custom-background-image',
-      `url(${preview.imageFill})`
-    );
-  }, [preview.imageFill]);
 
   return (
     <>
