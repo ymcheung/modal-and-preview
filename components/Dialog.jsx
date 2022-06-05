@@ -22,7 +22,10 @@ export default function Dialog({ isOpen, dispatchDialog, dialogTitle, dialogDesc
       formObject[name] = '';
     });
 
-    setForm(formObject);
+    setForm((prevState) => ({
+      ...prevState,
+      ...formObject
+    }));
   }, [setForm]);
 
   const handleOnFileChange = (event) => {
@@ -67,23 +70,23 @@ export default function Dialog({ isOpen, dispatchDialog, dialogTitle, dialogDesc
     return forms.map(({ type, name, required }, index) =>
     (
       <div className={styles.fileFormSection} key={`file-${index}`}>
-      {
-        form[name] ?
-        <>
-          <label htmlFor="fileUpload">
-            <img className={styles.labelFileCrop} src={form[name]} alt="替換圖片" />
-            <span className={styles.labelFileName}>{fileRef.current.files[0].name}</span>
+        <input id="fileUpload" className={styles.formFileUpload} type={type} name={name} ref={fileRef} onChange={handleOnFileChange} required={required} accept="image/*" />
+        {
+          form[name] ?
+          <>
+            <label htmlFor="fileUpload">
+              <img className={styles.labelFileCrop} src={form[name]} alt="替換圖片" />
+              <span className={styles.labelFileName}>{fileRef.current ? fileRef.current.files[0].name : '選另外一張圖片'}</span>
+            </label>
+            <button className={styles.formFileRemove} type="button" onClick={() => handleRemove(name)}>
+              <img src="/trash.svg" alt="刪除" />
+            </button>
+          </> :
+          <label className={styles.labelFileUpload} htmlFor="fileUpload">
+            <img className={styles.labelFileAddIcon} src="/plus.svg" alt="選擇" />
+            選擇圖片
           </label>
-          <button className={styles.formFileRemove} type="button" onClick={() => handleRemove(name)}>
-            <img src="/trash.svg" alt="刪除" />
-          </button>
-        </> :
-        <label className={styles.labelFileUpload} htmlFor="fileUpload">
-          <img className={styles.labelFileAddIcon} src="/plus.svg" alt="選擇" />
-          選擇圖片
-        </label>
-      }
-      <input id="fileUpload" className={styles.formFileUpload} type={type} name={name} ref={fileRef} onChange={handleOnFileChange} required={required} accept="image/*" />
+        }
       </div>
     ));
   }
